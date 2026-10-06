@@ -1,0 +1,49 @@
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="site-header">
+  <a routerLink="/" class="brand">
+    <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="currentColor" />
+      <rect x="7" y="18" width="4" height="7" rx="1" fill="#f3efe6" />
+      <rect x="14" y="13" width="4" height="12" rx="1" fill="#f3efe6" />
+      <rect x="21" y="8" width="4" height="17" rx="1" fill="#f3efe6" />
+    </svg>
+    <span>Klarplan</span>
+  </a>
+  <nav aria-label="Hauptnavigation">
+    <a
+      routerLink="/"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
+      >Rechner</a
+    >
+    <a routerLink="/tilgungsplan" routerLinkActive="is-active" ariaCurrentWhenActive="page"
+      >Tilgungsplan</a
+    >
+    <a routerLink="/vergleich" routerLinkActive="is-active" ariaCurrentWhenActive="page"
+      >Vergleich</a
+    >
+    <a routerLink="/hinweis" routerLinkActive="is-active" ariaCurrentWhenActive="page"
+      >Hinweis</a
+    >
+  </nav>
+</header>
+
+@if (apiDown()) {
+  <div class="site-banner">
+    <kp-notice tone="warning" title="Demo-API nicht erreichbar">
+      Der Rechner bleibt bedienbar. Angebote können erst geladen werden, wenn die API
+      antwortet.
+    </kp-notice>
+  </div>
+}
+
+<main id="inhalt" tabindex="-1">
+  <router-outlet />
+</main>
+
+<footer class="site-footer">
+  <p>Klarplan ist eine Demo. Kein Kreditangebot und keine Beratung.</p>
+  <a routerLink="/hinweis">Was dieser Rechner ist und was nicht</a>
+</footer>

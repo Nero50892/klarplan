@@ -1,0 +1,43 @@
+<div class="kp-page kp-prose">
+  <header class="kp-intro">
+    <p class="kp-eyebrow">Bevor du dich festlegst</p>
+    <h1>Was dieser Rechner ist</h1>
+    <p class="kp-lead">
+      Klarplan zeigt, wie sich ein Ratenkredit über die Monate verteilt. Mehr nicht.
+    </p>
+  </header>
+
+  <kp-notice tone="warning" title="Keine Beratung, kein Vertrag">
+    Es gibt keinen Antrag, keine Schufa-Abfrage und keine Vermittlung. Wer einen
+    Kredit aufnehmen will, prüft das Angebot der Bank und die eigenen Zahlen selbst.
+  </kp-notice>
+
+  <section>
+    <h2>Wie eine Annuität zu lesen ist</h2>
+    <p>
+      Die Monatsrate bleibt gleich. Am Anfang ist der Zinsanteil hoch, weil die
+      Restschuld noch groß ist. Mit der Zeit sinkt der Zinsanteil, und ein größerer
+      Teil der Rate tilgt den Kredit.
+    </p>
+    <p>
+      Der Sollzins ist der Nominalzins pro Jahr. Der effektive Jahreszins liegt bei
+      monatlicher Verzinsung etwas darüber, auch wenn neben dem Zins keine weiteren
+      Kosten anfallen.
+    </p>
+  </section>
+
+  <section>
+    <h2>Grenzen der ersten Version</h2>
+    <ul>
+      <li>Kein Disagio, keine Restschuldversicherung, keine Gebühren.</li>
+      <li>Keine Sondertilgung und keine anpassbare Rate.</li>
+      <li>Die Angebote im Vergleich sind erfundene Beispiele.</li>
+    </ul>
+  </section>
+
+  <kp-data-table
+    caption="So liest du den Tilgungsplan"
+    [columns]="columns"
+    [rows]="rows"
+  />
+</div>

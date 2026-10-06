@@ -1,0 +1,61 @@
+<div class="kp-page">
+  <header class="kp-intro">
+    <p class="kp-eyebrow">Monat für Monat</p>
+    <h1>Tilgungsplan</h1>
+    <p class="kp-lead">
+      Jede Zeile zeigt, welcher Teil der Rate Zins ist und welcher Teil die
+      Restschuld senkt. Bei langen Laufzeiten bleibt die Liste scrollbar, ohne alle
+      Monate auf einmal zu zeichnen.
+    </p>
+  </header>
+
+  <kp-notice title="Dieselbe Eingabe wie im Rechner">
+    Betrag, Laufzeit und Sollzins kommen aus dem Rechner. Der Plan füllt sich, sobald
+    die Berechnung ein Ergebnis liefert.
+  </kp-notice>
+
+  @if (draft.schedule().length === 0) {
+    <kp-data-table
+      caption="Tilgungsplan"
+      [columns]="columns"
+      [rows]="emptyRows"
+      emptyText="Noch keine Raten. Nach der Berechnung steht hier jeder Monat."
+    />
+  } @else if (draft.schedule().length > 24) {
+    <!-- Virtual Scrolling stellt das CDK bereit und braucht dafür cdkVirtualFor. -->
+    <div
+      class="kp-schedule"
+      role="table"
+      aria-label="Tilgungsplan"
+      [attr.aria-rowcount]="draft.schedule().length + 1"
+    >
+      <div class="kp-schedule__row kp-schedule__row--head" role="row">
+        <span role="columnheader">Monat</span>
+        <span role="columnheader">Rate</span>
+        <span role="columnheader">Zinsanteil</span>
+        <span role="columnheader">Tilgungsanteil</span>
+        <span role="columnheader">Restschuld</span>
+      </div>
+      <cdk-virtual-scroll-viewport itemSize="48" class="kp-schedule__viewport">
+        <div
+          class="kp-schedule__row"
+          role="row"
+          *cdkVirtualFor="let row of draft.schedule(); trackBy: trackMonth"
+        >
+          <span role="cell">{{ row.month }}</span>
+          <span role="cell">{{ formatEuro(row.paymentEuro) }}</span>
+          <span role="cell">{{ formatEuro(row.interestEuro) }}</span>
+          <span role="cell">{{ formatEuro(row.principalEuro) }}</span>
+          <span role="cell">{{ formatEuro(row.remainingEuro) }}</span>
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  } @else {
+    <kp-data-table
+      caption="Tilgungsplan"
+      [columns]="columns"
+      [rows]="scheduleRows()"
+      emptyText="Noch keine Raten."
+    />
+  }
+</div>

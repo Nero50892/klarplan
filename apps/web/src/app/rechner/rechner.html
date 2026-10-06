@@ -1,0 +1,73 @@
+<div class="kp-page">
+  <header class="kp-intro">
+    <p class="kp-eyebrow">Ratenkredit</p>
+    <h1>Was kostet der Kredit im Monat?</h1>
+    <p class="kp-lead">
+      Betrag, Laufzeit und Sollzins eingeben. Rate, Zinsen und effektiver Jahreszins
+      erscheinen daneben, noch bevor irgendwo unterschrieben wird.
+    </p>
+  </header>
+
+  <kp-notice title="Demo, kein Bankangebot">
+    Klarplan vergleicht keine echten Konditionen und stellt keinen Antrag. Die Zahlen
+    ersetzen keine Beratung.
+  </kp-notice>
+
+  <div class="kp-split">
+    <kp-card title="Eingabe">
+      <form class="kp-form" (submit)="berechnen($event)" autocomplete="off">
+        <kp-text-field
+          label="Kreditbetrag"
+          hint="Zwischen 1.000 und 100.000 Euro"
+          suffix="Euro"
+          type="number"
+          inputMode="decimal"
+          step="100"
+          [error]="principalError()"
+          [field]="loanForm.principalEuro"
+        />
+        <kp-text-field
+          label="Laufzeit"
+          hint="Zwischen 12 und 120 Monaten"
+          suffix="Monate"
+          type="number"
+          inputMode="numeric"
+          step="1"
+          [error]="termError()"
+          [field]="loanForm.termMonths"
+        />
+        <kp-text-field
+          label="Sollzins pro Jahr"
+          hint="Nominalzins, zum Beispiel 5. 0 Prozent ist erlaubt."
+          suffix="Prozent"
+          type="number"
+          inputMode="decimal"
+          step="0.1"
+          [error]="rateError()"
+          [field]="loanForm.nominalAnnualPercent"
+        />
+        <div class="kp-actions">
+          <kp-button type="submit">Rate berechnen</kp-button>
+          <kp-button type="button" variant="ghost" (click)="zuruecksetzen()">
+            Eingaben zurücksetzen
+          </kp-button>
+        </div>
+      </form>
+    </kp-card>
+
+    <kp-card title="Ergebnis">
+      @if (!draft.calculated()) {
+        <kp-notice title="Platzhalter">
+          Die Beträge sind noch keine Kalkulation. Sie bleiben bei null, bis die
+          Berechnung angeschlossen ist.
+        </kp-notice>
+      }
+      <div class="kp-metrics" aria-live="polite">
+        <kp-metric label="Monatsrate" [value]="monthlyPayment()" hint="Annuität" />
+        <kp-metric label="Gesamtzinsen" [value]="totalInterest()" />
+        <kp-metric label="Gesamtbetrag" [value]="totalAmount()" />
+        <kp-metric label="Effektiver Jahreszins" [value]="effectiveRate()" />
+      </div>
+    </kp-card>
+  </div>
+</div>

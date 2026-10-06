@@ -1,0 +1,102 @@
+<div class="kp-page">
+  <header class="kp-intro">
+    <p class="kp-eyebrow">Nur zur Orientierung</p>
+    <h1>Angebote vergleichen</h1>
+    <p class="kp-lead">
+      Zwei oder drei erfundene Beispiele nebeneinander. Jedes Angebot ist eine Demo
+      und stammt von keiner Bank.
+    </p>
+  </header>
+
+  <kp-notice title="Demo-Angebote">
+    Namen wie Demo-Bank Nord sind erfunden. Die Konditionen sind runde Übungszahlen
+    und kein Marktüberblick.
+  </kp-notice>
+
+  @switch (offers.status()) {
+    @case ('laedt') {
+      <p class="kp-loading" role="status" aria-live="polite">
+        <span class="kp-loading__spinner" aria-hidden="true"></span>
+        Demo-Angebote werden geladen.
+      </p>
+      <div class="kp-slots" aria-hidden="true">
+        <div class="kp-slot kp-slot--busy"></div>
+        <div class="kp-slot kp-slot--busy"></div>
+        <div class="kp-slot kp-slot--busy"></div>
+      </div>
+    }
+    @case ('fehler') {
+      <kp-notice tone="error" title="Angebote nicht geladen">
+        {{ offers.errorMessage() || 'Die Demo-API hat nicht geantwortet.' }}
+      </kp-notice>
+      <kp-button type="button" (click)="offers.load()">Erneut laden</kp-button>
+    }
+    @case ('bereit') {
+      <ul class="kp-offer-list">
+        @for (offer of offers.offers(); track offer.id) {
+          <li>
+            <kp-card [title]="offer.bankName">
+              <p>{{ offer.productName }}</p>
+              <p>{{ offer.disclaimer }}</p>
+              <p>
+                Sollzins {{ formatPercent(offer.nominalAnnualPercent) }},
+                {{ offer.termMonths }} Monate,
+                {{ formatEuro(offer.principalEuro) }}
+              </p>
+              <kp-button
+                type="button"
+                [variant]="isSelected(offer.id) ? 'primary' : 'secondary'"
+                [pressed]="isSelected(offer.id)"
+                (click)="angebotWaehlen(offer.id)"
+              >
+                {{ isSelected(offer.id) ? 'Aus Vergleich nehmen' : 'Zum Vergleich' }}
+              </kp-button>
+            </kp-card>
+          </li>
+        }
+      </ul>
+
+      @if (ausgewaehlte().length >= 2) {
+        <div class="kp-compare">
+          @for (offer of ausgewaehlte(); track offer.id) {
+            <kp-card [title]="offer.bankName">
+              <kp-metric
+                label="Monatsrate"
+                [value]="formatEuro(offer.monthlyPaymentEuro)"
+              />
+              <kp-metric
+                label="Sollzins"
+                [value]="formatPercent(offer.nominalAnnualPercent)"
+              />
+              <kp-metric
+                label="Effektiver Jahreszins"
+                [value]="formatPercent(offer.effectiveAnnualPercent)"
+              />
+            </kp-card>
+          }
+        </div>
+        <kp-data-table
+          caption="Vergleich der ausgewählten Demo-Angebote"
+          [columns]="columns"
+          [rows]="comparisonRows()"
+        />
+      } @else {
+        <p class="kp-empty">Wähle zwei oder drei Angebote für den Vergleich.</p>
+      }
+    }
+    @default {
+      <div class="kp-empty-panel">
+        <h2>Noch keine Demo-Angebote</h2>
+        <p>
+          Sobald der Ladevorgang angeschlossen ist, erscheinen hier drei erfundene
+          Beispiele. Bis dahin bleibt der Vergleich leer.
+        </p>
+        <div class="kp-slots">
+          <div class="kp-slot"><span>Platz für Angebot 1</span></div>
+          <div class="kp-slot"><span>Platz für Angebot 2</span></div>
+          <div class="kp-slot"><span>Platz für Angebot 3</span></div>
+        </div>
+      </div>
+    }
+  }
+</div>
