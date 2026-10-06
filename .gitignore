@@ -1,0 +1,26 @@
+# Persönliche Unterlagen (Lebenslauf, Adresse, Telefon)
+uploads/
+*.pdf
+
+# Abhängigkeiten und Build
+node_modules/
+dist/
+tmp/
+coverage/
+.angular/
+
+# .NET
+bin/
+obj/
+TestResults/
+
+# Secrets und lokale Umgebung
+.env
+.env.*
+!.env.example
+
+# Werkzeuge
+.nx/cache/
+.nx/workspace-data/
+*.log
+.DS_Store
