@@ -25,7 +25,17 @@ jobs:
           node-version: 22.23.3
           cache: npm
       - run: npm ci
-      - run: npx nx build web --configuration=production
+      - name: Produktionsbuild mit baseHref
+        run: |
+          NAME="${{ github.event.repository.name }}"
+          if [[ "$NAME" == *.github.io ]]; then
+            BASE="/"
+          else
+            BASE="/${NAME}/"
+          fi
+          npx nx build web --configuration=production --baseHref="$BASE"
+      - name: Unterseiten beim Neuladen
+        run: cp dist/apps/web/browser/index.html dist/apps/web/browser/404.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/apps/web/browser

@@ -11,7 +11,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npx nx run web:serve --port=4318',
+    command: 'npx nx run web:serve --port=4318 --host=127.0.0.1',
     url: baseURL,
     reuseExistingServer: !process.env['CI'],
     cwd: workspaceRoot,

@@ -94,7 +94,7 @@ Die Oberfläche kann über `.github/workflows/deploy-web.yml` auf GitHub Pages. 
 Das musst du selbst anlegen:
 
 1. Das Repository auf GitHub veröffentlichen und GitHub Pages für GitHub Actions erlauben.
-2. Bei einem Nutzer- oder Organisations-Site (`name.github.io`) bleibt `base href` bei `/`. Liegt die App in einem Projekt-Repository, `baseHref` im Build auf `/<repository>/` setzen.
+2. Der Deploy-Workflow setzt `baseHref` auf `/<repository>/`. Bei einer Nutzer- oder Organisations-Site (`name.github.io`) bleibt er bei `/`.
 3. In `apps/web/src/environments/environment.production.ts` die öffentliche API-Adresse eintragen, zum Beispiel `https://klarplan-api.fly.dev`. Leer bedeutet gleiche Herkunft und passt zu Docker, nicht zu GitHub Pages.
 4. Bei Fly.io einen Account anlegen, die App `klarplan-api` erzeugen und aus dem Repository-Root `fly deploy` ausführen. Fly.io kann eine Zahlungsmethode verlangen, auch wenn die Maschine auf null skaliert. Dieselbe Dockerdatei läuft auch bei einem anderen Container-Dienst mit kostenlosem Kontingent.
 
