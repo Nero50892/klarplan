@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/Klarplan.Api.Tests.csproj" />
+  </Folder>
+  <Project Path="Klarplan.Api.csproj" />
+</Solution>

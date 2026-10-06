@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.nx
+coverage
+uploads
+**/*.pdf
+**/bin
+**/obj
+**/.angular
+TestResults
