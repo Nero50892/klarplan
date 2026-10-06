@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+.kp-metric {
+  display: grid;
+  gap: 0.2rem;
+  min-height: 5.5rem;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: var(--kp-accent-soft);
+}
+
+.kp-metric__label,
+.kp-metric__hint,
+.kp-metric__value {
+  margin: 0;
+}
+
+.kp-metric__label {
+  color: var(--kp-ink-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.kp-metric__value {
+  color: var(--kp-ink);
+  font-family: var(--kp-font-serif);
+  font-size: 1.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.kp-metric__hint {
+  color: var(--kp-ink-muted);
+  font-size: 0.85rem;
+}

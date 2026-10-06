@@ -1,0 +1,7 @@
+<div class="kp-metric">
+  <p class="kp-metric__label" [id]="labelId">{{ label() }}</p>
+  <p class="kp-metric__value" [attr.aria-labelledby]="labelId">{{ value() }}</p>
+  @if (hint()) {
+    <p class="kp-metric__hint">{{ hint() }}</p>
+  }
+</div>

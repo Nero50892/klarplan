@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.kp-card {
+  height: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--kp-line);
+  border-radius: 20px;
+  background: var(--kp-surface);
+  box-shadow: var(--kp-shadow);
+}
+
+.kp-card__title {
+  margin: 0 0 1rem;
+  font-family: var(--kp-font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.kp-card__body {
+  display: grid;
+  gap: 1rem;
+}

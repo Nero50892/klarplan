@@ -1,0 +1,10 @@
+<button
+  class="kp-button"
+  [class.kp-button--secondary]="variant() === 'secondary'"
+  [class.kp-button--ghost]="variant() === 'ghost'"
+  [type]="type()"
+  [disabled]="disabled()"
+  [attr.aria-pressed]="pressed() === null ? null : pressed()"
+>
+  <ng-content />
+</button>

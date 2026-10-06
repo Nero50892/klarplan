@@ -1,0 +1,36 @@
+<label class="kp-field" [attr.for]="inputId">
+  <span class="kp-field__label" [id]="inputId + '-label'">{{ label() }}</span>
+  <span class="kp-field__control">
+    @if (field(); as currentField) {
+      <input
+        class="kp-field__input"
+        [id]="inputId"
+        [type]="type()"
+        [attr.inputmode]="inputMode() || null"
+        [attr.step]="step()"
+        [formField]="currentField"
+        [attr.aria-invalid]="error() ? 'true' : 'false'"
+        [attr.aria-describedby]="describedById() || null"
+      />
+    } @else {
+      <input
+        class="kp-field__input"
+        [id]="inputId"
+        [type]="type()"
+        [attr.inputmode]="inputMode() || null"
+        [attr.step]="step()"
+        [attr.aria-invalid]="error() ? 'true' : 'false'"
+        [attr.aria-describedby]="describedById() || null"
+      />
+    }
+    @if (suffix()) {
+      <span class="kp-field__suffix">{{ suffix() }}</span>
+    }
+  </span>
+  @if (hint() && !error()) {
+    <span class="kp-field__hint" [id]="hintId">{{ hint() }}</span>
+  }
+  @if (error()) {
+    <span class="kp-field__error" [id]="errorId" role="alert">{{ error() }}</span>
+  }
+</label>

@@ -1,0 +1,66 @@
+:host {
+  display: block;
+}
+
+.kp-field__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: var(--kp-ink);
+}
+
+.kp-field__control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--kp-line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+:host(.kp-field--invalid) .kp-field__control {
+  border-color: var(--kp-danger);
+  background: var(--kp-danger-soft);
+}
+
+.kp-field__input {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--kp-ink);
+  font: 400 1.05rem/1.2 var(--kp-font-sans);
+}
+
+.kp-field__input:focus {
+  outline: none;
+}
+
+.kp-field__control:focus-within {
+  outline: 3px solid var(--kp-focus);
+  outline-offset: 2px;
+}
+
+.kp-field__suffix {
+  flex: none;
+  color: var(--kp-ink-muted);
+  font-size: 0.95rem;
+}
+
+.kp-field__hint,
+.kp-field__error {
+  display: block;
+  margin: 0.4rem 0 0;
+  font-size: 0.92rem;
+}
+
+.kp-field__hint {
+  color: var(--kp-ink-muted);
+}
+
+.kp-field__error {
+  color: var(--kp-danger);
+  font-weight: 600;
+}
