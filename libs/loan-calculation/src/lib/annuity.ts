@@ -1,10 +1,36 @@
 import { LoanInput } from './loan.model';
 
-// TODO(Andreas) [Schritt 1/12]: Monatsrate berechnen
-// Ziel: Annuitätenformel R = K * (q^n * (q - 1)) / (q^n - 1), q = 1 + p/12/100
-// Akzeptanz: 10.000 €, 60 Monate, 5 % → 188,71 €; bei 0 % ist die Rate Betrag / Monate (166,67 €)
-// Tests: libs/loan-calculation/src/lib/annuity.spec.ts (aktuell it.todo)
-// Tipp: auf Cent runden erst bei der Ausgabe, nicht in Zwischenschritten
-export function calculateMonthlyPayment(_input: LoanInput): number {
-  return 0;
+export function calculateMonthlyPayment(input: LoanInput): number {
+  const {
+    principalEuro: K,
+    termMonths: months,
+    nominalAnnualPercent: interest,
+  } = input;
+
+  if (!K) {
+    return 0;
+  }
+
+  if (!interest) {
+    return roundTo(K / months);
+  }
+
+  const q = 1 + interest / (12 * 100);
+  if (months === 1) {
+    return roundTo(K * q);
+  }
+
+  const qn = Math.pow(q, months);
+  return roundTo((K * (qn * (q - 1))) / (qn - 1));
+}
+
+/** Kaufmännisches Runden ohne Angular — die Lib bleibt frameworkfrei. */
+export function roundTo(value: number, places = 2): number {
+  if (!Number.isFinite(value)) {
+    return value;
+  }
+
+  const factor = 10 ** places;
+  // + 0 normalisiert -0 zu 0
+  return Math.round(value * factor) / factor + 0;
 }

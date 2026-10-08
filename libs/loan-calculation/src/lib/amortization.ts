@@ -1,10 +1,39 @@
 import { AmortizationRow, LoanInput } from './loan.model';
+import { calculateMonthlyPayment, roundTo } from './annuity';
 
-// TODO(Andreas) [Schritt 2/12]: Tilgungsplan aufbauen
-// Ziel: für jeden Monat Rate, Zinsanteil, Tilgungsanteil und Restschuld. Zinsanteil = Restschuld * p/12/100
-// Akzeptanz: 10.000 €, 60 Monate, 5 % → Monat 1 Zins ungerundet 41,67 €, Tilgung etwa 147,05 €, Restschuld etwa 9.852,95 €; letzte Restschuld 0
-// Tests: libs/loan-calculation/src/lib/amortization.spec.ts (aktuell it.todo)
-// Tipp: die Rate aus Schritt 1 wiederverwenden und bei 0 % den Zinsanteil auf 0 setzen
-export function buildAmortizationSchedule(_input: LoanInput): AmortizationRow[] {
-  return [];
+export function buildAmortizationSchedule(input: LoanInput): AmortizationRow[] {
+  const { principalEuro: K, termMonths: n, nominalAnnualPercent: p } = input;
+
+  if (n < 1) {
+    return [];
+  }
+
+  const pPerMonth = p / (12 * 100);
+  const monthlyPayment = calculateMonthlyPayment(input);
+  const schedule: AmortizationRow[] = [];
+
+  let debt = K;
+  for (let month = 1; month <= n; month++) {
+    const isLast = month === n;
+    const interestEuro = roundTo(debt * pPerMonth, 2);
+    // Letzter Monat: Restschuld tilgen, damit Cent-Drift auf 0 geht
+    const principalEuro = isLast
+      ? debt
+      : roundTo(monthlyPayment - interestEuro, 2);
+    const paymentEuro = isLast
+      ? roundTo(interestEuro + principalEuro, 2)
+      : monthlyPayment;
+
+    debt = isLast ? 0 : roundTo(debt - principalEuro, 2);
+
+    schedule.push({
+      month,
+      paymentEuro,
+      interestEuro,
+      principalEuro,
+      remainingEuro: debt,
+    });
+  }
+
+  return schedule;
 }
