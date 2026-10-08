@@ -4,13 +4,13 @@ Die Oberfläche, das Routing, die Komponentenbibliothek und die Verkabelung steh
 
 ## Schritte
 
-- [ ] **Schritt 1/12. Monatsrate**
+- [x] **Schritt 1/12. Monatsrate**
   - Datei: `libs/loan-calculation/src/lib/annuity.ts`
   - Ziel: Annuität `R = K * (q^n * (q - 1)) / (q^n - 1)` mit `q = 1 + p/12/100`.
   - Akzeptanz: 10.000 €, 60 Monate, 5 % ergeben 188,71 €. Bei 0 % ist die Rate Betrag geteilt durch Monate, also 166,67 €.
   - Test: `libs/loan-calculation/src/lib/annuity.spec.ts`
 
-- [ ] **Schritt 2/12. Tilgungsplan**
+- [x] **Schritt 2/12. Tilgungsplan**
   - Datei: `libs/loan-calculation/src/lib/amortization.ts`
   - Ziel: pro Monat Rate, Zinsanteil, Tilgungsanteil und Restschuld. Zinsanteil ist Restschuld mal `p/12/100`.
   - Akzeptanz: dieselben Eckdaten, Monat 1 etwa 41,67 € Zins und 147,05 € Tilgung, Restschuld etwa 9.852,95 €. Die letzte Restschuld ist 0. Bei 0 % ist jeder Zinsanteil 0.
