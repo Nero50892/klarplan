@@ -1,3 +1,4 @@
+import { buildAmortizationSchedule } from './amortization';
 import { LoanInput } from './loan.model';
 
 export interface LoanTotals {
@@ -5,14 +6,9 @@ export interface LoanTotals {
   totalAmountEuro: number;
 }
 
-// TODO(Andreas) [Schritt 3/12]: Gesamtzinsen und Gesamtbetrag
-// Ziel: Gesamtbetrag = Summe der ungerundeten Raten, Gesamtzinsen = Gesamtbetrag − Kreditbetrag
-// Akzeptanz: 10.000 €, 60 Monate, 5 % → Gesamtbetrag 11.322,74 €, Gesamtzinsen 1.322,74 €; bei 0 % sind die Zinsen 0
-// Tests: libs/loan-calculation/src/lib/totals.spec.ts (aktuell it.todo)
-// Tipp: nicht die schon auf Cent gerundete Monatsrate mit der Laufzeit malnehmen
-export function calculateLoanTotals(_input: LoanInput): LoanTotals {
-  return {
-    totalInterestEuro: 0,
-    totalAmountEuro: 0,
-  };
+export function calculateLoanTotals(input: LoanInput): LoanTotals {
+  const ammoPlan = buildAmortizationSchedule(input);
+  const totalInterestEuro = ammoPlan.reduce((acc, row) => acc + row.interestEuro, 0);
+  const totalAmountEuro = ammoPlan.reduce((acc, row) => acc + row.paymentEuro, 0);
+  return { totalInterestEuro, totalAmountEuro };
 }

@@ -16,7 +16,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek und die Verkabelung steh
   - Akzeptanz: dieselben Eckdaten, Monat 1 etwa 41,67 € Zins und 147,05 € Tilgung, Restschuld etwa 9.852,95 €. Die letzte Restschuld ist 0. Bei 0 % ist jeder Zinsanteil 0.
   - Test: `libs/loan-calculation/src/lib/amortization.spec.ts`
 
-- [ ] **Schritt 3/12. Gesamtzinsen und Gesamtbetrag**
+- [x] **Schritt 3/12. Gesamtzinsen und Gesamtbetrag**
   - Datei: `libs/loan-calculation/src/lib/totals.ts`
   - Ziel: Gesamtbetrag als Summe der ungerundeten Raten, Gesamtzinsen als Gesamtbetrag minus Kreditbetrag.
   - Akzeptanz: 11.322,74 € Gesamtbetrag und 1.322,74 € Zinsen. Bei 0 % sind die Zinsen 0.
