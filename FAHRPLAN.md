@@ -1,6 +1,6 @@
 # Fahrplan für Andreas
 
-Die Oberfläche, das Routing, die Komponentenbibliothek und die Verkabelung stehen. Offen sind die Berechnung, der Zustand der Fachseiten und die Fachlogik der API. Jeder Schritt hat einen Kommentar `TODO(Andreas)` an der genannten Stelle. Die Tests dazu sind `it.todo`, `test.fixme` oder bei xUnit `Fact(Skip)`.
+Die Oberfläche, das Routing, die Komponentenbibliothek, die Verkabelung und die reine Berechnung (`libs/loan-calculation`) stehen. Offen sind der Zustand der Fachseiten und die Fachlogik der API. Jeder Schritt hat einen Kommentar `TODO(Andreas)` an der genannten Stelle. Die Tests dazu sind `it.todo`, `test.fixme` oder bei xUnit `Fact(Skip)`.
 
 ## Schritte
 
@@ -22,7 +22,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek und die Verkabelung steh
   - Akzeptanz: 11.322,74 € Gesamtbetrag und 1.322,74 € Zinsen. Bei 0 % sind die Zinsen 0.
   - Test: `libs/loan-calculation/src/lib/totals.spec.ts`
 
-- [ ] **Schritt 4/12. Effektiver Jahreszins**
+- [x] **Schritt 4/12. Effektiver Jahreszins**
   - Datei: `libs/loan-calculation/src/lib/effective-rate.ts`
   - Ziel: ohne weitere Kosten `(1 + p/12/100)^12 - 1`, als Prozentzahl.
   - Akzeptanz: 5 % nominal ergeben etwa 5,116 %, in der Anzeige 5,12 %. 0 % bleibt 0.
