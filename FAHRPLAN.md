@@ -46,7 +46,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek, die Verkabelung und die
   - Akzeptanz: die Beispielwerte zeigen 188,71 €. Ungültige Eingaben rechnen nicht. Zurücksetzen zeigt wieder die Platzhalter.
   - Test: derselbe Playwright-Fall, plus optional ein Komponenten-Test am Handler
 
-- [ ] **Schritt 8/12. Formularschema**
+- [x] **Schritt 8/12. Formularschema**
   - Datei: `apps/web/src/app/rechner/rechner.ts`
   - Ziel: Signal Forms mit `min` und `max`. Betrag 1.000 bis 100.000, Laufzeit 12 bis 120, Sollzins 0 bis 15. Die drei `*Error`-Computeds lesen die erste Fehlermeldung.
   - Akzeptanz: zu kleine Werte zeigen den deutschen Fehler am Feld. 0 % Zins bleibt gültig.

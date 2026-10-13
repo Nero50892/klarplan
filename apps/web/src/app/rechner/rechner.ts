@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { form } from '@angular/forms/signals';
+import { form, max, min, required } from '@angular/forms/signals';
 import { Button, Card, Metric, Notice, TextField } from '@klarplan/ui';
 import { formatEuro, formatPercent } from '../core/format';
 import { LoanDraft } from '../loan/loan-draft';
@@ -19,14 +19,26 @@ export class Rechner {
   // Akzeptanz: leere oder zu kleine Werte zeigen den Fehler am Feld; 0 % Zins bleibt gültig; der Hinweistext weicht dem Fehler
   // Tests: apps/web-e2e/src/klarplan.spec.ts (test.fixme zur ungültigen Eingabe)
   // Tipp: form(this.draft.formModel, (path) => { min(path.principalEuro, 1000, { message: 'Mindestens 1.000 Euro.' }); })
-  protected readonly loanForm = form(this.draft.formModel);
+  protected readonly loanForm = form(this.draft.formModel, (schema) => {
+    required(schema.principalEuro, { message: 'Bitte geben Sie einen Betrag ein.' });
+    min(schema.principalEuro, 1000, { message: 'Mindestens 1.000 Euro.' });
+    max(schema.principalEuro, 100000, { message: 'Höchstens 100.000 Euro.' });
+    required(schema.termMonths, { message: 'Bitte geben Sie eine Laufzeit ein.' });
+    min(schema.termMonths, 12, { message: 'Mindestens 12 Monate.' });
+    max(schema.termMonths, 120, { message: 'Höchstens 120 Monate.' });
+    required(schema.nominalAnnualPercent, { message: 'Bitte geben Sie einen Sollzins ein.' });
+    min(schema.nominalAnnualPercent, 0, { message: 'Mindestens 0 %.' });
+    max(schema.nominalAnnualPercent, 15, { message: 'Höchstens 15 %.' });
+  });
 
   // TODO(Andreas) [Schritt 8/12]: Fehlertexte aus dem Formular lesen
   // Ziel: die erste message aus loanForm.principalEuro().errors() und den anderen Feldern
   // Akzeptanz: ohne Schema bleibt der Text leer; mit Schema erscheint die deutsche Meldung am Feld
-  protected readonly principalError = computed(() => '');
-  protected readonly termError = computed(() => '');
-  protected readonly rateError = computed(() => '');
+  protected readonly principalError = computed(() => this.loanForm.principalEuro().errors()[0]?.message ?? '');
+  protected readonly termError = computed(() => this.loanForm.termMonths().errors()[0]?.message ?? '');
+  protected readonly rateError = computed(() =>
+    this.loanForm.nominalAnnualPercent().errors()[0]?.message ?? '',
+  );
 
   protected readonly monthlyPayment = computed(() =>
     formatEuro(this.draft.monthlyPaymentEuro()),

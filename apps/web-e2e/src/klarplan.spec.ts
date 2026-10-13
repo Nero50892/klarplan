@@ -78,8 +78,11 @@ test('Berechnung zeigt 188,71 Euro für 10.000 Euro, 60 Monate und 5 Prozent', a
   await expect(page.getByText('5,12 %')).toBeVisible();
 });
 
-test.fixme('eine ungültige Eingabe zeigt den Fehler am Feld und rechnet nicht', async () => {
-  // Hängt an Schritt 8.
+test('eine ungültige Eingabe zeigt den Fehler am Feld und rechnet nicht', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Kreditbetrag').fill('0');
+  await expect(page.getByRole('alert')).toHaveText('Mindestens 1.000 Euro.');
+  await expect(page.getByText('Platzhalter')).toBeVisible();
 });
 
 test.fixme('der Vergleich zeigt drei als Demo gekennzeichnete Angebote', async () => {
