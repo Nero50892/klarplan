@@ -21,14 +21,10 @@ export class LoanDraft {
 
   readonly calculated = signal(false);
 
-  // TODO(Andreas) [Schritt 6/12]: Kennzahlen mit computed() ableiten
-  // Ziel: die vier Werte aus result() oder direkt aus den Berechnungsfunktionen ableiten, nicht als feste 0
-  // Akzeptanz: ändert sich das Ergebnis, ändern sich die abgeleiteten Werte ohne weiteres Setzen
-  // Tests: derselbe Playwright-Fall zur Berechnung
-  readonly monthlyPaymentEuro = computed(() => 0);
-  readonly totalInterestEuro = computed(() => 0);
-  readonly totalAmountEuro = computed(() => 0);
-  readonly effectiveAnnualPercent = computed(() => 0);
+  readonly monthlyPaymentEuro = computed(() => this.result().monthlyPaymentEuro);
+  readonly totalInterestEuro = computed(() => this.result().totalInterestEuro);
+  readonly totalAmountEuro = computed(() => this.result().totalAmountEuro);
+  readonly effectiveAnnualPercent = computed(() => this.result().effectiveAnnualPercent);
 
   calculateLoanData(): void {
     const input: LoanInput = {...this.formModel()};

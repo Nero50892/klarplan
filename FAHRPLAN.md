@@ -34,7 +34,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek, die Verkabelung und die
   - Akzeptanz: nach dem Berechnen stehen Rate, Zinsen, Gesamtbetrag, Effektivzins und der Plan in den Signals, `calculated` wird wahr.
   - Test: `apps/web-e2e/src/klarplan.spec.ts`, Fall zur Berechnung (`test.fixme`)
 
-- [ ] **Schritt 6/12. Ableitungen**
+- [x] **Schritt 6/12. Ableitungen**
   - Datei: `apps/web/src/app/loan/loan-draft.ts`
   - Ziel: `monthlyPaymentEuro`, `totalInterestEuro`, `totalAmountEuro` und `effectiveAnnualPercent` per `computed()` aus dem Ergebnis oder den Funktionen ableiten. Heute liefern sie 0.
   - Akzeptanz: ändert sich das Ergebnis, ändern sich die Kennzahlen ohne ein zweites Setzen.
