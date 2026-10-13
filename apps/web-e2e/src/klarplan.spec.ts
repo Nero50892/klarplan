@@ -66,8 +66,16 @@ test('Seiten bestehen die AXE-Prüfung', async ({ page }, testInfo) => {
   }
 });
 
-test.fixme('Berechnung zeigt 188,71 Euro für 10.000 Euro, 60 Monate und 5 Prozent', async () => {
-  // Hängt an Schritt 1 und Schritt 7.
+test('Berechnung zeigt 188,71 Euro für 10.000 Euro, 60 Monate und 5 Prozent', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Kreditbetrag').fill('10000');
+  await page.getByLabel('Laufzeit').fill('60');
+  await page.getByLabel('Sollzins pro Jahr').fill('5');
+  await page.getByRole('button', { name: 'Rate berechnen' }).click();
+  await expect(page.getByText('188,71 €').first()).toBeVisible();
+  await expect(page.getByText('1.322,74 €').first()).toBeVisible();
+  await expect(page.getByText('11.322,74 €').first()).toBeVisible();
+  await expect(page.getByText('5,12 %')).toBeVisible();
 });
 
 test.fixme('eine ungültige Eingabe zeigt den Fehler am Feld und rechnet nicht', async () => {

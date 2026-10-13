@@ -40,7 +40,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek, die Verkabelung und die
   - Akzeptanz: ändert sich das Ergebnis, ändern sich die Kennzahlen ohne ein zweites Setzen.
   - Test: derselbe Playwright-Fall
 
-- [ ] **Schritt 7/12. Berechnen und Zurücksetzen**
+- [x] **Schritt 7/12. Berechnen und Zurücksetzen**
   - Datei: `apps/web/src/app/rechner/rechner.ts`
   - Ziel: `berechnen` prüft das Formular und schreibt das Ergebnis. `zuruecksetzen` stellt 10.000 €, 60 Monate und 5 % her und leert das Ergebnis.
   - Akzeptanz: die Beispielwerte zeigen 188,71 €. Ungültige Eingaben rechnen nicht. Zurücksetzen zeigt wieder die Platzhalter.

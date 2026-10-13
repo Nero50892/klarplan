@@ -9,4 +9,4 @@ export {
   type LoanInput,
   type LoanSummary,
 } from './lib/loan.model';
-export { calculateLoanTotals, type LoanTotals } from './lib/totals';
+export { calculateLoanTotals } from './lib/totals';

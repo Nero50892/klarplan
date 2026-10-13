@@ -3,6 +3,8 @@ import { form } from '@angular/forms/signals';
 import { Button, Card, Metric, Notice, TextField } from '@klarplan/ui';
 import { formatEuro, formatPercent } from '../core/format';
 import { LoanDraft } from '../loan/loan-draft';
+import { initialLoanForm } from '../loan/loan-form.model';
+import { emptyLoanSummary } from '@klarplan/loan-calculation';
 
 @Component({
   selector: 'kp-rechner',
@@ -46,6 +48,11 @@ export class Rechner {
   // Tipp: event.preventDefault() bleibt, damit die Seite nicht neu lädt
   berechnen(event: Event): void {
     event.preventDefault();
+
+    const hasErrors = this.loanForm().errors().length > 0;
+    if (!hasErrors) {
+      this.draft.calculateLoanData();
+    }
   }
 
   // TODO(Andreas) [Schritt 7/12]: Eingaben zurücksetzen
@@ -53,6 +60,9 @@ export class Rechner {
   // Akzeptanz: danach stehen wieder 10.000 €, 60 Monate und 5 %, die Kennzahlen sind Platzhalter
   // Tests: optional ein Komponenten-Test neben diesem Handler
   zuruecksetzen(): void {
-    return;
+    this.draft.formModel.set({ ...initialLoanForm });
+    this.draft.result.set({ ...emptyLoanSummary });
+    this.draft.schedule.set([]);
+    this.draft.calculated.set(false);
   }
 }
