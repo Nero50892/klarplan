@@ -89,6 +89,6 @@ test.fixme('der Vergleich zeigt drei als Demo gekennzeichnete Angebote', async (
   // Hängt an Schritt 10 und Schritt 11.
 });
 
-test.fixme('ein Fehler beim Laden der Angebote zeigt den Fehlerzustand', async () => {
+test.fixme('ein Fehler beim Laden der Angebote zeigt den Fehlerzustand', async ({ page }) => {
   // Hängt an Schritt 10.
 });
