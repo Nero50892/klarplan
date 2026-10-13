@@ -1,10 +1,5 @@
 import { buildAmortizationSchedule } from './amortization';
-import { LoanInput } from './loan.model';
-
-export interface LoanTotals {
-  totalInterestEuro: number;
-  totalAmountEuro: number;
-}
+import { LoanInput, LoanTotals } from './loan.model';
 
 export function calculateLoanTotals(input: LoanInput): LoanTotals {
   const ammoPlan = buildAmortizationSchedule(input);

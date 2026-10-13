@@ -11,6 +11,11 @@ export interface LoanSummary {
   effectiveAnnualPercent: number;
 }
 
+export interface LoanTotals {
+  totalInterestEuro: number;
+  totalAmountEuro: number;
+}
+
 export interface AmortizationRow {
   month: number;
   paymentEuro: number;

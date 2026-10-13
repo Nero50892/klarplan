@@ -28,7 +28,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek, die Verkabelung und die
   - Akzeptanz: 5 % nominal ergeben etwa 5,116 %, in der Anzeige 5,12 %. 0 % bleibt 0.
   - Test: `libs/loan-calculation/src/lib/effective-rate.spec.ts`
 
-- [ ] **Schritt 5/12. Zustand des Rechners**
+- [x] **Schritt 5/12. Zustand des Rechners**
   - Datei: `apps/web/src/app/loan/loan-draft.ts`
   - Ziel: aus `formModel` die Eingabe lesen und `result` sowie `schedule` setzen. Rechner und Tilgungsplan teilen sich diesen Zustand.
   - Akzeptanz: nach dem Berechnen stehen Rate, Zinsen, Gesamtbetrag, Effektivzins und der Plan in den Signals, `calculated` wird wahr.
