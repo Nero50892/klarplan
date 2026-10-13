@@ -56,9 +56,9 @@
         }
       </ul>
 
-      @if (ausgewaehlte().length >= 2) {
+      @if (selectedOffers().length >= 2) {
         <div class="kp-compare">
-          @for (offer of ausgewaehlte(); track offer.id) {
+          @for (offer of selectedOffers(); track offer.id) {
             <kp-card [title]="offer.bankName">
               <kp-metric
                 label="Monatsrate"

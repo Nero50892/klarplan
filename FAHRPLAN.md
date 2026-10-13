@@ -52,7 +52,7 @@ Die Oberfläche, das Routing, die Komponentenbibliothek, die Verkabelung und die
   - Akzeptanz: zu kleine Werte zeigen den deutschen Fehler am Feld. 0 % Zins bleibt gültig.
   - Test: `apps/web-e2e/src/klarplan.spec.ts`, Fall zur ungültigen Eingabe (`test.fixme`)
 
-- [ ] **Schritt 9/12. Auswahl im Vergleich**
+- [x] **Schritt 9/12. Auswahl im Vergleich**
   - Datei: `apps/web/src/app/vergleich/vergleich.ts`
   - Ziel: zwei oder drei Angebote über `selectedIds` auswählen. `ausgewaehlte` filtert die geladene Liste. Ein viertes Angebot geht nicht.
   - Akzeptanz: bei weniger als zwei Angeboten bleibt der Hinweis stehen. `aria-pressed` folgt der Auswahl.

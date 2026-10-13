@@ -23,26 +23,31 @@ export class Vergleich {
 
   readonly selectedIds = signal<string[]>([]);
 
-  // TODO(Andreas) [Schritt 9/12]: Zwei bis drei Angebote auswählen
-  // Ziel: selectedIds umschalten, mindestens 2 und höchstens 3. ausgewaehlte liefert die passenden Angebote aus offers.offers()
-  // Akzeptanz: ein einzelnes Angebot zeigt noch keinen Vergleich; das vierte lässt sich nicht zusätzlich wählen; abwählen geht immer
-  // Tests: apps/web-e2e/src/klarplan.spec.ts (test.fixme zum Vergleich)
-  // Tipp: die Reihenfolge der Auswahl beibehalten, damit die Spalten stabil bleiben
-  protected readonly ausgewaehlte = computed<LoanOffer[]>(() => []);
+  protected readonly selectedOffers = computed<LoanOffer[]>(() => {
+    const offersById = new Map(this.offers.offers().map((offer) => [offer.id, offer]));
+    return this.selectedIds().flatMap((id) => {
+      const offer = offersById.get(id);
+      return offer ? [offer] : [];
+    });
+  });
 
   constructor() {
     this.offers.load();
   }
 
-  // TODO(Andreas) [Schritt 9/12]: Auswahl umschalten
-  // Ziel: id hinzufügen oder entfernen, Obergrenze 3
-  // Akzeptanz: der gedrückte Knopf zeigt aria-pressed passend zur Auswahl
-  angebotWaehlen(_id: string): void {
-    return;
+  angebotWaehlen(selectedId: string): void {
+    if (this.selectedIds().includes(selectedId)) {
+      this.selectedIds.update((ids) => ids.filter((id) => id !== selectedId));
+      return;
+    }
+    if (this.selectedIds().length >= 3) {
+      return;
+    }
+    this.selectedIds.update((ids) => [...ids, selectedId]);
   }
 
   protected comparisonRows(): Record<string, string>[] {
-    return this.ausgewaehlte().map((offer) => ({
+    return this.selectedOffers().map((offer) => ({
       bank: `${offer.bankName}: ${offer.productName}`,
       rate: formatPercent(offer.nominalAnnualPercent),
       effective: formatPercent(offer.effectiveAnnualPercent),
