@@ -15,24 +15,35 @@ app.UseCors();
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.MapGet("/api/angebote", () =>
-{
-    // TODO(Andreas) [Schritt 11/12]: Demo-Angebote ausliefern und prüfen
-    // Ziel: DemoOffers.All zurückgeben. Jedes Angebot bleibt als Demo gekennzeichnet, ohne echte Bankmarken.
-    // Die Monatsrate kommt aus derselben Annuität wie in libs/loan-calculation, nicht aus einer fest eingetragenen Zahl.
-    // Akzeptanz: drei Angebote, jedes mit isDemo true und einem Hinweistext; keine Konditionen, die wie ein echtes Angebot wirken
-    // Tests: apps/api/tests/OfferEndpointTests.cs (aktuell Fact mit Skip)
-    return Results.Ok(Array.Empty<OfferDto>());
-});
+    Results.Ok(DemoOffers.All.Select(LoanMath.WithFigures)));
 
 app.MapPost("/api/angebote/pruefen", (OfferCheckRequest request) =>
 {
-    // TODO(Andreas) [Schritt 11/12]: Angebot prüfen und die Kennzahlen berechnen
-    // TODO(Andreas) [Schritt 12/12]: Anfrage validieren
-    // Ziel: Betrag 1.000–100.000 €, Laufzeit 12–120 Monate, Sollzins 0–15 %. Sonst 400 mit den fehlerhaften Feldern.
-    // Akzeptanz: 10.000 €, 60 Monate, 5 % → 188,71 € Monatsrate; 500 € → Validierungsfehler am Betrag; Zins 0 ist erlaubt
-    // Tests: apps/api/tests/OfferEndpointTests.cs (aktuell Fact mit Skip)
-    _ = request;
-    return Results.Ok(new OfferCheckResponse(0, 0, 0, 0, true));
+    var errors = new Dictionary<string, string[]>();
+    if (request.PrincipalEuro is < 1_000m or > 100_000m)
+    {
+        errors["principalEuro"] = ["Der Betrag muss zwischen 1.000 und 100.000 Euro liegen."];
+    }
+
+    if (request.TermMonths is < 12 or > 120)
+    {
+        errors["termMonths"] = ["Die Laufzeit muss zwischen 12 und 120 Monaten liegen."];
+    }
+
+    if (request.NominalAnnualPercent is < 0m or > 15m)
+    {
+        errors["nominalAnnualPercent"] = ["Der Sollzins muss zwischen 0 und 15 Prozent liegen."];
+    }
+
+    if (errors.Count > 0)
+    {
+        return Results.ValidationProblem(errors);
+    }
+
+    return Results.Ok(LoanMath.Summarize(
+        (double)request.PrincipalEuro,
+        request.TermMonths,
+        (double)request.NominalAnnualPercent));
 });
 
 app.Run();

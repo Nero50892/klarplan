@@ -13,7 +13,7 @@ describe('Rechner', () => {
     await fixture.whenStable();
   });
 
-  it('zeigt Eingaben und Platzhalter', () => {
+  it('zeigt Eingaben und den leeren Ergebniszustand', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector('h1')?.textContent).toContain(
       'Was kostet der Kredit im Monat?',
@@ -22,6 +22,6 @@ describe('Rechner', () => {
     expect(element.textContent).toContain('Laufzeit');
     expect(element.textContent).toContain('Sollzins pro Jahr');
     expect(element.textContent).toContain('0,00');
-    expect(element.textContent).toContain('Platzhalter');
+    expect(element.textContent).toContain('Noch nicht berechnet');
   });
 });

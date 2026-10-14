@@ -1,18 +1,56 @@
-import { Service, signal } from '@angular/core';
+import { httpResource } from '@angular/common/http';
+import { computed, inject, Service, signal } from '@angular/core';
+import { API_URL } from '../core/api-url';
 import { LoanOffer, OfferLoadStatus } from './offer.model';
 
 @Service()
 export class OfferService {
-  readonly status = signal<OfferLoadStatus>('leer');
-  readonly offers = signal<LoanOffer[]>([]);
-  readonly errorMessage = signal('');
+  private readonly apiUrl = inject(API_URL);
+  private readonly angefordert = signal(false);
 
-  // TODO(Andreas) [Schritt 10/12]: Angebote laden, inklusive Lade- und Fehlerzustand
-  // Ziel: GET {apiUrl}/api/angebote. Vorher status auf "laedt", bei Erfolg "bereit" und die Liste setzen, bei Fehler "fehler" und errorMessage.
-  // Akzeptanz: leere Liste bleibt "leer" oder zeigt den leeren Zustand; Netzwerkfehler zeigt den Hinweis und lässt "Erneut laden" zu; während des Ladens ist aria-busy gesetzt
-  // Tests: apps/web/src/app/angebote/offer.service.spec.ts (aktuell it.todo) und die Playwright-Fälle mit test.fixme
-  // Tipp: httpResource oder HttpClient, die Basisadresse kommt aus API_URL
+  private readonly angebote = httpResource<LoanOffer[]>(
+    () => (this.angefordert() ? `${this.apiUrl}/api/angebote` : undefined),
+    {
+      defaultValue: [],
+      parse: demoOffers,
+    },
+  );
+
+  readonly offers = computed(() =>
+    this.angebote.status() === 'error' ? [] : this.angebote.value(),
+  );
+
+  readonly status = computed<OfferLoadStatus>(() => {
+    switch (this.angebote.status()) {
+      case 'loading':
+      case 'reloading':
+        return 'laedt';
+      case 'error':
+        return 'fehler';
+      case 'resolved':
+      case 'local':
+        return this.angebote.value().length === 0 ? 'leer' : 'bereit';
+      default:
+        return 'leer';
+    }
+  });
+
+  readonly errorMessage = computed(() =>
+    this.status() === 'fehler' ? 'Die Demo-API hat nicht geantwortet.' : '',
+  );
+
   load(): void {
-    return;
+    if (this.angefordert()) {
+      this.angebote.reload();
+      return;
+    }
+    this.angefordert.set(true);
   }
+}
+
+function demoOffers(value: unknown): LoanOffer[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value.filter((offer): offer is LoanOffer => offer?.isDemo === true);
 }

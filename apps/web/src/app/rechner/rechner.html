@@ -57,9 +57,8 @@
 
     <kp-card title="Ergebnis">
       @if (!draft.calculated()) {
-        <kp-notice title="Platzhalter">
-          Die Beträge sind noch keine Kalkulation. Sie bleiben bei null, bis die
-          Berechnung angeschlossen ist.
+        <kp-notice title="Noch nicht berechnet">
+          Die Beträge bleiben bei null, bis die Rate berechnet wird.
         </kp-notice>
       }
       <div class="kp-metrics" aria-live="polite">

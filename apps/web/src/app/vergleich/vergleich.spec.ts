@@ -1,6 +1,8 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoanOffer } from '../angebote/offer.model';
-import { OfferService } from '../angebote/offer.service';
+import { API_URL } from '../core/api-url';
 import { Vergleich } from './vergleich';
 
 function offer(id: string, bankName: string): LoanOffer {
@@ -20,34 +22,53 @@ function offer(id: string, bankName: string): LoanOffer {
 
 describe('Vergleich', () => {
   let fixture: ComponentFixture<Vergleich>;
+  let http: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Vergleich],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: API_URL, useValue: 'http://api.test' },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Vergleich);
-    await fixture.whenStable();
+    http = TestBed.inject(HttpTestingController);
+    TestBed.flushEffects();
+    fixture.detectChanges();
   });
 
-  it('zeigt den leeren Zustand', () => {
+  afterEach(() => {
+    for (const request of http.match(() => true)) {
+      request.flush([]);
+    }
+    http.verify();
+  });
+
+  it('zeigt den leeren Zustand', async () => {
     const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('[aria-busy="true"]')).not.toBeNull();
+
+    http.expectOne('http://api.test/api/angebote').flush([]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
     expect(element.querySelector('h1')?.textContent).toContain('Angebote vergleichen');
     expect(element.textContent).toContain('Noch keine Demo-Angebote');
     expect(element.textContent).toContain('Platz für Angebot 1');
   });
 
   it('wählt höchstens drei Angebote und behält die Reihenfolge', async () => {
-    const service = TestBed.inject(OfferService);
-    service.status.set('bereit');
-    service.offers.set([
+    http.expectOne('http://api.test/api/angebote').flush([
       offer('nord', 'Demo-Bank Nord'),
       offer('sued', 'Demo-Bank Süd'),
       offer('west', 'Demo-Bank West'),
       offer('ost', 'Demo-Bank Ost'),
     ]);
-    fixture.detectChanges();
     await fixture.whenStable();
+    fixture.detectChanges();
 
     const element = fixture.nativeElement as HTMLElement;
     const choose = (bankName: string) => {

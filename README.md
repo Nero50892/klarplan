@@ -1,14 +1,10 @@
 # Klarplan
 
-Klarplan ist ein Ratenkredit-Rechner für Verbraucher. Man gibt Betrag, Laufzeit und Sollzins ein und soll Monatsrate, Zinsen, Gesamtbetrag, effektiven Jahreszins und einen Tilgungsplan sehen. Daneben lassen sich zwei oder drei erfundene Demo-Angebote vergleichen.
+Klarplan ist ein Ratenkredit-Rechner. Betrag, Laufzeit und Sollzins ergeben Monatsrate, Zinsen, Gesamtbetrag, effektiven Jahreszins und einen Tilgungsplan. Daneben lassen sich zwei oder drei erfundene Demo-Angebote vergleichen.
 
-Es gibt keine Anmeldung und keine Datenbank. Die App ist eine Demo und kein Kreditangebot.
+Es gibt keine Anmeldung und keine Datenbank. Die App ist eine Demo und kein Kreditangebot. Banknamen und Konditionen sind erfunden.
 
-**Stand: Fachlogik in Arbeit, siehe [FAHRPLAN.md](FAHRPLAN.md).**
-
-## Entstehung
-
-Projektgerüst, Gestaltung und die UI-Bibliothek sind KI-unterstützt entstanden. Fachlogik, Zustand und die dazugehörigen Tests schreibt Andreas selbst. Diesen Abschnitt kannst du später anpassen, wenn du beschreibst, was du davon übernommen, geändert oder neu geschrieben hast.
+Gerüst, Gestaltung und Teile der Fachlogik sind mit KI-Unterstützung entstanden.
 
 ## Oberfläche
 
@@ -16,11 +12,11 @@ Projektgerüst, Gestaltung und die UI-Bibliothek sind KI-unterstützt entstanden
 
 ![Rechner auf dem Handy](docs/screenshots/rechner-mobil.png)
 
-![Leerer Tilgungsplan](docs/screenshots/tilgungsplan.png)
+![Tilgungsplan](docs/screenshots/tilgungsplan.png)
 
-![Leerer Vergleich](docs/screenshots/vergleich.png)
+![Vergleich](docs/screenshots/vergleich.png)
 
-Die Kennzahlen stehen auf null, solange die Berechnung offen ist. Der Tilgungsplan und der Vergleich zeigen ihren leeren Zustand.
+Vor der Berechnung stehen die Kennzahlen auf null. Danach zeigen Rechner und Tilgungsplan dasselbe Ergebnis. Der Vergleich lädt drei Demo-Angebote und stellt zwei oder drei davon nebeneinander.
 
 ## Architektur
 
@@ -32,7 +28,9 @@ libs/ui                  Komponentenbibliothek
 libs/loan-calculation    reine TypeScript-Funktionen
 ```
 
-Die Seiten sind Rechner, Tilgungsplan, Vergleich und ein Hinweis, was der Rechner nicht ist. Rechner und Tilgungsplan teilen sich die Eingabe in `LoanDraft`. Die Angebote holt `OfferService` bei der API. Heute antwortet `GET /api/angebote` mit einer leeren Liste. Die Health-Route `/health` ist fertig, damit die Oberfläche merkt, ob die API da ist.
+Die Seiten sind Rechner, Tilgungsplan, Vergleich und ein Hinweis, was der Rechner nicht ist. Rechner und Tilgungsplan teilen sich die Eingabe in `LoanDraft`. `OfferService` lädt die Angebote per `httpResource` von `GET /api/angebote`. Die API liefert drei Demo-Angebote und prüft über `POST /api/angebote/pruefen` Betrag, Laufzeit und Sollzins mit derselben Annuität. `GET /health` meldet, ob die API erreichbar ist.
+
+Grenzen: Betrag 1.000 bis 100.000 €, Laufzeit 12 bis 120 Monate, Sollzins 0 bis 15 %. 10.000 €, 60 Monate und 5 % ergeben 188,71 € Monatsrate.
 
 ## Technik
 
@@ -83,7 +81,7 @@ npm run e2e
 dotnet test apps/api/Klarplan.slnx
 ```
 
-Playwright prüft Layout, Navigation, die leeren Zustände und die Barrierefreiheit mit axe-core. Fälle, die auf die Fachlogik warten, sind `test.fixme` und laufen nicht mit.
+Playwright prüft Berechnung, Validierung, Navigation, leere Zustände, den Vergleich und die Barrierefreiheit mit axe-core.
 
 ## CI und Deployment
 
@@ -91,7 +89,7 @@ Playwright prüft Layout, Navigation, die leeren Zustände und die Barrierefreih
 
 Die Oberfläche kann über `.github/workflows/deploy-web.yml` auf GitHub Pages. Die API ist in `fly.toml` für Fly.io vorbereitet, Region Frankfurt, mit einer Maschine, die auf null herunterfährt.
 
-Das musst du selbst anlegen:
+Veröffentlichen:
 
 1. Das Repository auf GitHub veröffentlichen und GitHub Pages für GitHub Actions erlauben.
 2. Der Deploy-Workflow setzt `baseHref` auf `/<repository>/`. Bei einer Nutzer- oder Organisations-Site (`name.github.io`) bleibt er bei `/`.

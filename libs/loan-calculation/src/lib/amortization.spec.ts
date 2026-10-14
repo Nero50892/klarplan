@@ -20,7 +20,7 @@ describe('Tilgungsplan', () => {
   it('beginnt bei 10.000 €, 60 Monaten und 5 % mit etwa 41,67 € Zins und 147,05 € Tilgung', () => {
     const schedule = buildAmortizationSchedule(input);
     expect(schedule[0].interestEuro).toBe(41.67);
-    // Mit Cent-Rundung: 188,71 − 41,67 = 147,04 (Fahrplan: „etwa 147,05“)
+    // Mit Cent-Rundung: 188,71 − 41,67 = 147,04.
     expect(schedule[0].principalEuro).toBe(147.04);
     expect(schedule[0].remainingEuro).toBe(9852.96);
   });

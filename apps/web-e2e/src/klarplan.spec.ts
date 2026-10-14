@@ -8,7 +8,7 @@ const pages = [
   { path: '/hinweis', heading: 'Was dieser Rechner ist', nav: 'Hinweis' },
 ];
 
-test('Rechner zeigt Eingaben und Platzhalter', async ({ page }) => {
+test('Rechner zeigt Eingaben und den leeren Ergebniszustand', async ({ page }) => {
   await page.goto('/');
   await expect(
     page.getByRole('heading', { level: 1, name: 'Was kostet der Kredit im Monat?' }),
@@ -16,7 +16,7 @@ test('Rechner zeigt Eingaben und Platzhalter', async ({ page }) => {
   await expect(page.getByLabel('Kreditbetrag')).toBeVisible();
   await expect(page.getByLabel('Laufzeit')).toBeVisible();
   await expect(page.getByLabel('Sollzins pro Jahr')).toBeVisible();
-  await expect(page.getByText('Platzhalter')).toBeVisible();
+  await expect(page.getByText('Noch nicht berechnet')).toBeVisible();
   await expect(page.getByText('0,00 €').first()).toBeVisible();
 });
 
@@ -38,6 +38,13 @@ test('Tilgungsplan ist leer', async ({ page }) => {
 });
 
 test('Vergleich ist leer', async ({ page }) => {
+  await page.route('**/api/angebote', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: '[]',
+    }),
+  );
   await page.goto('/vergleich');
   await expect(page.getByRole('heading', { name: 'Noch keine Demo-Angebote' })).toBeVisible();
   await expect(page.getByText('Platz für Angebot 3')).toBeVisible();
@@ -82,13 +89,71 @@ test('eine ungültige Eingabe zeigt den Fehler am Feld und rechnet nicht', async
   await page.goto('/');
   await page.getByLabel('Kreditbetrag').fill('0');
   await expect(page.getByRole('alert')).toHaveText('Mindestens 1.000 Euro.');
-  await expect(page.getByText('Platzhalter')).toBeVisible();
+  await expect(page.getByText('Noch nicht berechnet')).toBeVisible();
 });
 
-test.fixme('der Vergleich zeigt drei als Demo gekennzeichnete Angebote', async () => {
-  // Hängt an Schritt 10 und Schritt 11.
+const demoOffers = [
+  {
+    id: 'demo-nord',
+    bankName: 'Demo-Bank Nord',
+    productName: 'Übungsratenkredit',
+    nominalAnnualPercent: 3,
+    effectiveAnnualPercent: 3.04,
+    termMonths: 60,
+    principalEuro: 10000,
+    monthlyPaymentEuro: 179.69,
+    isDemo: true,
+    disclaimer:
+      'Erfundenes Demo-Angebot. Keine echte Bank, keine echten Konditionen und kein Vertragsangebot.',
+  },
+  {
+    id: 'demo-mitte',
+    bankName: 'Beispielkasse Mitte',
+    productName: 'Musterkredit',
+    nominalAnnualPercent: 5,
+    effectiveAnnualPercent: 5.12,
+    termMonths: 60,
+    principalEuro: 10000,
+    monthlyPaymentEuro: 188.71,
+    isDemo: true,
+    disclaimer:
+      'Erfundenes Demo-Angebot. Keine echte Bank, keine echten Konditionen und kein Vertragsangebot.',
+  },
+  {
+    id: 'demo-sued',
+    bankName: 'Musterfinanz Süd',
+    productName: 'Rechenbeispiel',
+    nominalAnnualPercent: 7,
+    effectiveAnnualPercent: 7.23,
+    termMonths: 60,
+    principalEuro: 10000,
+    monthlyPaymentEuro: 198.01,
+    isDemo: true,
+    disclaimer:
+      'Erfundenes Demo-Angebot. Keine echte Bank, keine echten Konditionen und kein Vertragsangebot.',
+  },
+];
+
+test('der Vergleich zeigt drei als Demo gekennzeichnete Angebote', async ({ page }) => {
+  await page.route('**/api/angebote', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(demoOffers),
+    }),
+  );
+  await page.goto('/vergleich');
+  await expect(page.getByRole('heading', { name: 'Demo-Bank Nord' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Beispielkasse Mitte' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Musterfinanz Süd' })).toBeVisible();
+  await expect(page.getByText('Erfundenes Demo-Angebot').first()).toBeVisible();
+  await expect(page.getByText('Noch keine Demo-Angebote')).toHaveCount(0);
 });
 
-test.fixme('ein Fehler beim Laden der Angebote zeigt den Fehlerzustand', async ({ page }) => {
-  // Hängt an Schritt 10.
+test('ein Fehler beim Laden der Angebote zeigt den Fehlerzustand', async ({ page }) => {
+  await page.route('**/api/angebote', (route) => route.abort('failed'));
+  await page.goto('/vergleich');
+  await expect(page.getByText('Angebote nicht geladen')).toBeVisible();
+  await expect(page.getByText('Die Demo-API hat nicht geantwortet.')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Erneut laden' })).toBeVisible();
 });

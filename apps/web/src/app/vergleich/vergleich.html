@@ -15,7 +15,7 @@
 
   @switch (offers.status()) {
     @case ('laedt') {
-      <p class="kp-loading" role="status" aria-live="polite">
+      <p class="kp-loading" role="status" aria-live="polite" aria-busy="true">
         <span class="kp-loading__spinner" aria-hidden="true"></span>
         Demo-Angebote werden geladen.
       </p>
@@ -88,8 +88,8 @@
       <div class="kp-empty-panel">
         <h2>Noch keine Demo-Angebote</h2>
         <p>
-          Sobald der Ladevorgang angeschlossen ist, erscheinen hier drei erfundene
-          Beispiele. Bis dahin bleibt der Vergleich leer.
+          Die Demo-API hat keine Angebote geliefert. Sobald welche da sind, stehen
+          sie hier.
         </p>
         <div class="kp-slots">
           <div class="kp-slot"><span>Platz für Angebot 1</span></div>
