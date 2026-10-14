@@ -2,10 +2,23 @@ using Klarplan.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var corsOrigins = builder.Configuration["Cors:Origins"]
+    ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    ?? [];
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
-        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+    {
+        policy.AllowAnyHeader().AllowAnyMethod();
+        if (corsOrigins.Length == 0)
+        {
+            policy.AllowAnyOrigin();
+            return;
+        }
+
+        policy.WithOrigins(corsOrigins);
+    });
 });
 
 var app = builder.Build();

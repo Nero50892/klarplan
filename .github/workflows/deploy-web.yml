@@ -25,6 +25,19 @@ jobs:
           node-version: 22.23.3
           cache: npm
       - run: npm ci
+      - name: API-Adresse für den Produktionsbuild
+        env:
+          API_URL: ${{ vars.API_URL }}
+        run: |
+          if [[ -z "${API_URL}" ]]; then
+            echo "Repository-Variable API_URL fehlt. Für GitHub Pages die öffentliche API-Adresse setzen."
+            exit 1
+          fi
+          printf '%s\n' \
+            'export const environment = {' \
+            "  apiUrl: '${API_URL}'," \
+            '};' \
+            > apps/web/src/environments/environment.production.ts
       - name: Produktionsbuild mit baseHref
         run: |
           NAME="${{ github.event.repository.name }}"

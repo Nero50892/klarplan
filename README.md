@@ -87,13 +87,13 @@ Playwright prüft Berechnung, Validierung, Navigation, leere Zustände, den Verg
 
 `.github/workflows/ci.yml` führt Lint, Unit-Tests, Playwright, den API-Test und `docker compose build` aus.
 
-Die Oberfläche kann über `.github/workflows/deploy-web.yml` auf GitHub Pages. Die API ist in `fly.toml` für Fly.io vorbereitet, Region Frankfurt, mit einer Maschine, die auf null herunterfährt.
+Die Oberfläche geht über `.github/workflows/deploy-web.yml` auf GitHub Pages. Die öffentliche API-Adresse steht nicht im Repo: der Deploy schreibt sie aus der Repository-Variable `API_URL` in `environment.production.ts`. Leer im Quellcode bedeutet gleiche Herkunft und passt zu Docker.
 
 Veröffentlichen:
 
 1. Das Repository auf GitHub veröffentlichen und GitHub Pages für GitHub Actions erlauben.
-2. Der Deploy-Workflow setzt `baseHref` auf `/<repository>/`. Bei einer Nutzer- oder Organisations-Site (`name.github.io`) bleibt er bei `/`.
-3. In `apps/web/src/environments/environment.production.ts` die öffentliche API-Adresse eintragen, zum Beispiel `https://klarplan-api.fly.dev`. Leer bedeutet gleiche Herkunft und passt zu Docker, nicht zu GitHub Pages.
-4. Bei Fly.io einen Account anlegen, die App `klarplan-api` erzeugen und aus dem Repository-Root `fly deploy` ausführen. Fly.io kann eine Zahlungsmethode verlangen, auch wenn die Maschine auf null skaliert. Dieselbe Dockerdatei läuft auch bei einem anderen Container-Dienst mit kostenlosem Kontingent.
+2. Unter Settings → Secrets and variables → Actions → Variables die Variable `API_URL` setzen, zum Beispiel `https://klarplan.onrender.com`.
+3. Der Deploy-Workflow setzt `baseHref` auf `/<repository>/`. Bei einer Nutzer- oder Organisations-Site (`name.github.io`) bleibt er bei `/`.
+4. Auf dem API-Host optional `Cors__Origins` setzen, zum Beispiel `https://nero50892.github.io`. Mehrere Origins durch Komma. Ohne Wert bleibt CORS offen (lokal und Docker).
 
-Ein Secret braucht der aktuelle Stand nicht.
+`fly.toml` bleibt als Alternative zu Render. Ein Secret braucht der aktuelle Stand nicht.
